@@ -226,6 +226,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 //Body Section
                 CupertinoSliverRefreshControl(
+                  onRefresh: ()async{
+                    await state.getCategories();
+                  },
                   builder: (
                     context,
                     mode,
