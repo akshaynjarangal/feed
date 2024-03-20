@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 final navkey = GlobalKey<NavigatorState>();
 
@@ -10,3 +11,5 @@ class AppUrls {
   static const String home = "$basePath/home";
   static const String myfeed = "$basePath/my_feed";
 }
+
+const storage = FlutterSecureStorage();

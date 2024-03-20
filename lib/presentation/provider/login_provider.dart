@@ -1,6 +1,11 @@
+import 'dart:convert';
+
+import 'package:feed/core/constants/app_constants.dart';
 import 'package:feed/domain/usecases/auth_usecase.dart';
 import 'package:flutter/material.dart';
+import 'package:injectable/injectable.dart';
 
+@injectable
 class LoginProvider extends ChangeNotifier {
   final AuthUseCase _authUseCase;
   LoginProvider({required AuthUseCase authUseCase})
@@ -48,7 +53,9 @@ class LoginProvider extends ChangeNotifier {
         setErrorMessage = error;
         setLoading = false;
       },
-      (data) {
+      (data)async {
+        final decoded = jsonDecode(data);
+        await storage.write(key: "token", value: "${decoded["token"]["access"]}");
         setLoginSuccess = true;
         setLoading = false;
       },

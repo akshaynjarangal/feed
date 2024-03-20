@@ -1,5 +1,5 @@
 import 'dart:convert';
-
+import 'dart:developer';
 import 'package:dartz/dartz.dart';
 import 'package:feed/core/constants/app_constants.dart';
 import 'package:http/http.dart' as http;
@@ -22,11 +22,12 @@ class AuthRepositoryImpl implements AuthRepository {
           "phone": phone,
         },
       );
-      if (res.statusCode == 200) {
+      final decoded = jsonDecode(res.body);
+      if (res.statusCode == 202&&decoded["message"]==null) {
         return Right(res.body);
       } else {
-        final decoded = jsonDecode(res.body);
-        return Left("${decoded["message"]}");
+        log("RES ---> ${res.body}");
+        return const Left("Login Failed");
       }
     } catch (e) {
       return Future.value(Left(e.toString()));

@@ -1,10 +1,14 @@
+import 'dart:developer';
+
 import 'package:dotted_border/dotted_border.dart';
 import 'package:feed/core/constants/app_constants.dart';
 import 'package:feed/core/utils/app_colors.dart';
+import 'package:feed/presentation/provider/home_provider.dart';
 import 'package:feed/presentation/widgets/app_space_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:provider/provider.dart';
 
 class AddFeedScreen extends StatelessWidget {
   const AddFeedScreen({super.key});
@@ -175,31 +179,37 @@ class AddFeedScreen extends StatelessWidget {
                       ),
                     ],
                   ),
-                  Wrap(
-                    runSpacing: 8,
-                    spacing: 8,
-                    children: List.generate(
-                      7,
-                      (index) {
-                        return OutlinedButton(
-                          style: OutlinedButton.styleFrom(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 16,
-                              vertical: 0,
-                            ),
-                            foregroundColor: AppColors.foreground,
-                            side: const BorderSide(
-                              color: AppColors.primary,
-                            ),
-                          ),
-                          onPressed: () {},
-                          child: Text(
-                            "Category $index",
-                            style: Theme.of(context).textTheme.bodySmall,
-                          ),
-                        );
-                      },
-                    ),
+                  Consumer<HomeProvider>(
+                    
+                    builder: (context,state,_) {
+                      log("Categories: ${state.categoriesData.length}");
+                      return Wrap(
+                        runSpacing: 8,
+                        spacing: 8,
+                        children: List.generate(
+                          state.categoriesData.length,
+                          (index) {
+                            return OutlinedButton(
+                              style: OutlinedButton.styleFrom(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 16,
+                                  vertical: 0,
+                                ),
+                                foregroundColor: AppColors.foreground,
+                                side: const BorderSide(
+                                  color: AppColors.primary,
+                                ),
+                              ),
+                              onPressed: () {},
+                              child: Text(
+                                "${state.categoriesData[index].title}",
+                                style: Theme.of(context).textTheme.bodySmall,
+                              ),
+                            );
+                          },
+                        ),
+                      );
+                    },
                   ),
                 ],
               ),

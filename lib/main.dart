@@ -2,8 +2,8 @@ import 'package:feed/core/constants/app_constants.dart';
 import 'package:feed/core/utils/app_colors.dart';
 import 'package:feed/core/utils/app_routes.dart';
 import 'package:feed/di/di.dart';
-import 'package:feed/presentation/pages/add_feed_scree.dart';
-import 'package:feed/presentation/pages/home_screen.dart';
+import 'package:feed/presentation/pages/add_feed_screen.dart';
+import 'package:feed/presentation/pages/home/home_screen.dart';
 import 'package:feed/presentation/provider/home_provider.dart';
 import 'package:feed/presentation/provider/login_provider.dart';
 import 'package:flutter/material.dart';
@@ -16,17 +16,18 @@ import 'presentation/pages/login_screen.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+  final token = await storage.read(key: "token");
   configureDependencies();
-  runApp(const MyApp());
+  runApp(MyApp(isLogin: token == null ? false : true));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
+  const MyApp({super.key, required this.isLogin});
+  final bool isLogin;
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (context) => HomeProvider(),
+      create: (context) => getIt<HomeProvider>(),
       child: MaterialApp(
         debugShowMaterialGrid: false,
         title: 'Novi Feed',
@@ -67,13 +68,16 @@ class MyApp extends StatelessWidget {
           useMaterial3: true,
         ),
         navigatorKey: navkey,
-        initialRoute: AppRoutes.home,
+        initialRoute: (isLogin) ? AppRoutes.home : AppRoutes.login,
         routes: {
           AppRoutes.login: (context) => ChangeNotifierProvider(
                 create: (context) => getIt<LoginProvider>(),
                 child: const LoginScreen(),
               ),
-          AppRoutes.home: (context) => const HomeScreen(),
+          AppRoutes.home: (context) => ChangeNotifierProvider.value(
+                value: getIt<HomeProvider>()..getCategories(),
+                child: const HomeScreen(),
+              ),
           AppRoutes.addFeed: (context) => const AddFeedScreen(),
         },
       ),
