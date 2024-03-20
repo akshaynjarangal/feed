@@ -2,7 +2,7 @@ import 'package:flutter/foundation.dart';
 
 class HomeProvider extends ChangeNotifier {
 
-  final List<String> _categories = ["Explore", "Trending", "All Categorues", "Physics","Chemistry"];
+  final List<String> _categories = ["Explore", "Trending", "All Categories", "Physics","Chemistry"];
   List<String> get categories => _categories;
 
   String _selectedCategory = "Explore";

@@ -1,7 +1,11 @@
 import 'package:feed/core/constants/app_constants.dart';
 import 'package:feed/core/utils/app_colors.dart';
+import 'package:feed/core/utils/app_routes.dart';
+import 'package:feed/di/di.dart';
+import 'package:feed/presentation/pages/add_feed_scree.dart';
 import 'package:feed/presentation/pages/home_screen.dart';
 import 'package:feed/presentation/provider/home_provider.dart';
+import 'package:feed/presentation/provider/login_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -12,6 +16,7 @@ import 'presentation/pages/login_screen.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+  configureDependencies();
   runApp(const MyApp());
 }
 
@@ -23,6 +28,7 @@ class MyApp extends StatelessWidget {
     return ChangeNotifierProvider(
       create: (context) => HomeProvider(),
       child: MaterialApp(
+        debugShowMaterialGrid: false,
         title: 'Novi Feed',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
@@ -46,6 +52,9 @@ class MyApp extends StatelessWidget {
             titleSmall: TextStyle(
               color: AppColors.foreground,
             ),
+            labelSmall: TextStyle(
+              color: AppColors.foreground,
+            ),
           ),
           scaffoldBackgroundColor: AppColors.scaffold,
           appBarTheme: const AppBarTheme(
@@ -58,10 +67,14 @@ class MyApp extends StatelessWidget {
           useMaterial3: true,
         ),
         navigatorKey: navkey,
-        initialRoute: '/home',
+        initialRoute: AppRoutes.home,
         routes: {
-          '/login': (context) => const LoginScreen(),
-          '/home': (context) => const HomeScreen(),
+          AppRoutes.login: (context) => ChangeNotifierProvider(
+                create: (context) => getIt<LoginProvider>(),
+                child: const LoginScreen(),
+              ),
+          AppRoutes.home: (context) => const HomeScreen(),
+          AppRoutes.addFeed: (context) => const AddFeedScreen(),
         },
       ),
     );
