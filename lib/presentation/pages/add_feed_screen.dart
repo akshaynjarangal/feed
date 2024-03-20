@@ -180,8 +180,7 @@ class AddFeedScreen extends StatelessWidget {
                     ],
                   ),
                   Consumer<HomeProvider>(
-                    
-                    builder: (context,state,_) {
+                    builder: (context, state, _) {
                       log("Categories: ${state.categoriesData.length}");
                       return Wrap(
                         runSpacing: 8,

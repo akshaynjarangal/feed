@@ -401,7 +401,8 @@ class _HomeScreenState extends State<HomeScreen> {
       floatingActionButton: FloatingActionButton(
         shape: const CircleBorder(),
         foregroundColor: AppColors.foreground,
-        onPressed: () {
+        onPressed: () async{
+          await flickMultiManager.pause();
           navkey.currentState?.pushNamed(AppRoutes.addFeed);
         },
         backgroundColor: AppColors.primary,
